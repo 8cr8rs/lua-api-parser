@@ -11,10 +11,6 @@ def filter_strings_only(list: list[Any]):
     return [item for item in list if isinstance(item, str)]
 
 
-# Note: options being None is a placeholder and configuring formatting will be
-# done later
-
-
 class LuaConstruct(ABC):
     name: str
     description: str
@@ -27,6 +23,8 @@ class LuaConstruct(ABC):
     def format(self, options: None = None) -> str:
         """Returns a formatted version of the construct in Lua type annotation
         format"""
+        # Note: options being None is a placeholder and configuring formatting will be
+        # done later
 
 
 T = TypeVar("T", bound=LuaConstruct)
