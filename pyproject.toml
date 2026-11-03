@@ -51,3 +51,6 @@ reportUnusedCallResult = "none"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+
+[tool.ruff.lint]
+ignore = ["I001"]
