@@ -16,21 +16,21 @@ def build_parser() -> argparse.ArgumentParser:
         add_help=False,
     )
     general = parser.add_argument_group("General Options")
-    _ = general.add_argument(
+    general.add_argument(
         "-h",
         "--help",
         action="help",
         help="Print this help message and exit",
     )
     test = parser.add_argument_group("Test Options")
-    _ = test.add_argument(
+    test.add_argument(
         "--cov",
         "--coverage",
         action="store_true",
         dest="coverage",
         help="Generate coverage report",
     )
-    _ = test.add_argument(
+    test.add_argument(
         "--cov-report",
         action="store",
         default="html",
@@ -40,7 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None):
     parser = build_parser()
     args = parser.parse_args(argv)
 
@@ -53,8 +53,7 @@ def main(argv: list[str] | None = None) -> int:
 
     exit_code = pytest.main(pytest_args)
     print(f"Pytest exited with code: {exit_code}")
-    return exit_code
 
 
 if __name__ == "__main__":
-    _ = main()
+    main()
