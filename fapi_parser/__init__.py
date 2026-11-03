@@ -1,24 +1,30 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
 import json
 from typing import Any
 
+from . import output
+
+# Do this before importing other modules
+# They depend on the root logger. It only makes sense to do so.
+output.setup_root_logger()
+
 from . import (
     option,
-    output,
 )
 from .parser import parse_json
-
 
 def main(argv: list[str] | None = None) -> int:
     parser = option.build_parser()
     # The only reason the static type checker assumes the below value parse as
     # CustomArgs is due to the code generating the Namespace being at runtime.
     args: option.CustomArgs = parser.parse_args(argv) # pyright: ignore [reportAssignmentType]
+    root_logger = logging.getLogger()
+    root_logger.setLevel(args.log_level)
 
-    logger = output.get_logger("fapi-parser", args.log_level)
-    logger.debug(args)
+    logger = logging.getLogger(__name__)
 
     def parse_json_file(file_path: str) -> dict[str, Any] | None:
         """Parses a JSON object from a file"""
