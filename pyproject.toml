@@ -41,9 +41,9 @@ dev = ["pytest>=9.0", "pytest-cov>=7.0"]
 
 [project.urls]
 # Replace <project> with repository name
-Repository = "https://github.com/8cr8rs/<project>"
-Documentation = "https://github.com/8cr8rs/<project>#readme"
-Issues = "https://github.com/8cr8rs/<project>/issues"
+Repository = "https://github.com/8cr8rs/factorio-api-parser"
+Documentation = "https://github.com/8cr8rs/factorio-api-parser#readme"
+Issues = "https://github.com/8cr8rs/factorio-api-parser/issues"
 
 [tool.pyright]
 # Prevents the forced assign to unused variable warning
