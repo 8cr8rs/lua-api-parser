@@ -6,6 +6,7 @@ from zipfile import ZipFile
 
 import requests
 from requests.exceptions import HTTPError
+from pathlib import Path
 
 BASE_URL = "https://lua-api.factorio.com"
 
@@ -28,7 +29,7 @@ def check_version_exists(version: str) -> bool:
         raise
 
 
-def get_archive_zip(version: str, file_path: str) -> None:
+def get_archive_zip(version: str, file_path: Path):
     """Downloads the archive.zip from a specific version"""
     try:
         zip_url = f"{BASE_URL}/{version}/static/archive.zip"
@@ -42,7 +43,7 @@ def get_archive_zip(version: str, file_path: str) -> None:
         pass
 
 
-def extract_zip(zip_path: str, dest: str) -> None:
+def extract_zip(zip_path: Path, dest: Path):
     logger.debug(f"Extracting {zip_path} to {dest}")
     with ZipFile(zip_path, "r") as zip:
         zip.extractall(dest)
