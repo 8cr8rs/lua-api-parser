@@ -48,6 +48,8 @@ Issues = "https://github.com/8cr8rs/factorio-api-parser/issues"
 [tool.pyright]
 # Prevents the forced assign to unused variable warning
 reportUnusedCallResult = "none"
+# Any is used for JSON objects due to ambiguity
+reportExplicitAny = "none"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
