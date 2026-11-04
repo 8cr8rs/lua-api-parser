@@ -6,6 +6,16 @@ import logging
 from collections.abc import Iterable
 from typing import Protocol, override
 
+def str_to_bool(value: str):
+    if value.lower() in ("true", "yes", "t", "y", "1"):
+        return True
+    elif value.lower() in ("false", "no", "f", "n", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError(
+            f"Boolean string expected, got {type(value)} from {value}."
+        )
+
 
 class HelpFormatter(argparse.HelpFormatter):
     @override
@@ -84,7 +94,6 @@ def build_parser() -> argparse.ArgumentParser:
     file = parser.add_argument_group("File Options")
     file.add_argument(
         "-P",
-        action="store",
         dest="output_dir",
         help="Output directory for files",
     )
@@ -99,14 +108,16 @@ def build_parser() -> argparse.ArgumentParser:
     file.add_argument(
         "--onefile",
         dest="onefile",
-        action="store_true",
-        help="Output as one file",
+        nargs="?",
+        const=True,
+        default=False,
+        type=str_to_bool,
+        help="Output type definitions as one file",
     )
 
     # Positional arguments
     parser.add_argument(
         "input_files",
-        action="store",
         nargs=argparse.REMAINDER,
     )
     return parser
