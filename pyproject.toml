@@ -17,7 +17,6 @@ keywords = [
   "factorio-modding",
   "lua",
   "modders",
-
 ]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
@@ -47,10 +46,12 @@ Documentation = "https://github.com/8cr8rs/<project>#readme"
 Issues = "https://github.com/8cr8rs/<project>/issues"
 
 [tool.pyright]
+# Prevents the forced assign to unused variable warning
 reportUnusedCallResult = "none"
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
 
 [tool.ruff.lint]
+# Sorted imports
 ignore = ["I001"]
