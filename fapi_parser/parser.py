@@ -1,14 +1,21 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
+import logging
+
 from abc import ABC, abstractmethod
 from typing import Any, TypeVar, override
 
-from .formatter import comment_lines, sort_order
+from .formatter import comment_lines
 
+logger = logging.getLogger(__name__)
 
 def filter_strings_only(list: list[Any]):
     return [item for item in list if isinstance(item, str)]
+
+def sort_order(data: list[Any]) -> None:
+    """Sorts a JSON list by the 'order' property of each object"""
+    data.sort(key=lambda obj: obj.get("order"))
 
 
 class LuaConstruct(ABC):
@@ -171,6 +178,10 @@ class LuaClass(LuaConstruct):
         return f"{class_declaration}{class_attributes}{class_literal}{class_methods}"
 
 
+def parse_lua_classes(class_object: list[Any]):
+    return parse_object_list(class_object or [], LuaClass)
+
+
 def parse_json(obj: dict[str, Any]):
     try:
         ## General Metadata
@@ -183,6 +194,7 @@ def parse_json(obj: dict[str, Any]):
         lua_classes = parse_object_list(obj["classes"] or [], LuaClass)
         with open("classes.d.lua", "w", encoding="utf-8") as f:
             f.write("\n\n".join([lua_class.format() for lua_class in lua_classes]))
+        logger.debug(f"Parsed {len(lua_classes)} classes")
         # lua_globals = parse_object_list(obj["globals"])
         # lua_concepts = parse_object_list(obj["concepts"])
         # lua_global_functions = parse_object_list(obj["global_functions"])

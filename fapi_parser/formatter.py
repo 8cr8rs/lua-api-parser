@@ -22,8 +22,3 @@ def prefix_lines(s: str, prefix: str) -> str:
 
 def comment_lines(s: str) -> str:
     return prefix_lines(s, prefix="--- ")
-
-
-def sort_order(data: list[Any]) -> None:
-    """Sorts a JSON list by the 'order' property of each object"""
-    data.sort(key=lambda obj: obj.get("order"))
