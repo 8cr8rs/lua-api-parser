@@ -8,7 +8,7 @@ from collections.abc import Iterable
 from typing import Protocol, override
 
 
-def str_to_bool(value: str):
+def str_to_bool(value: str) -> bool:
     if value.lower() in ("true", "yes", "t", "y", "1"):
         return True
     elif value.lower() in ("false", "no", "f", "n", "0"):
@@ -49,7 +49,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="factorio-api-docs-generator",
         usage="%(prog)s [options]",
-        description="A CLI to convert JSON docs from Factorio's online API into lua_ls/EmmyLua LSP parsable type definitions.",
+        description=(
+            "A CLI to convert JSONdocs from Factorio's online API into "
+            "lua_ls/EmmyLua LSP parsable type definitions."
+        ),
         add_help=False,
         conflict_handler="resolve",
         formatter_class=HelpFormatter,

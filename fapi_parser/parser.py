@@ -10,9 +10,12 @@ from .formatter import comment_lines
 
 logger = logging.getLogger(__name__)
 
-
-def filter_strings_only(list: list[Any]):
-    return [item for item in list if isinstance(item, str)]
+def filter_strings_only(list: list[Any]) -> list[str]:
+    return [
+        item
+        for item in list
+        if isinstance(item, str)
+    ]
 
 
 def sort_order(data: list[Any]) -> None:
@@ -32,14 +35,14 @@ class LuaConstruct(ABC):
     def format(self, options: None = None) -> str:
         """Returns a formatted version of the construct in Lua type annotation
         format"""
-        # Note: options being None is a placeholder and configuring formatting will be
-        # done later
+        # Note: options being None is a placeholder and configuring formatting
+        # will be done later
 
 
-T = TypeVar("T", bound=LuaConstruct)
+C = TypeVar("C", bound=LuaConstruct)
 
 
-def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:
+def parse_object_list(obj: list[Any], construct: type[C]) -> list[C]:
     """Parse the list obj with class construct"""
     if not obj:
         return []
@@ -48,7 +51,7 @@ def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:
     sort_order(objects)
 
     # more descriptive annotation maybe
-    lua_constructs: list[T] = []
+    lua_constructs: list[C] = []
     for _obj in objects:
         # expected 0 arguments
         lua_constructs.append(construct(_obj))
@@ -130,21 +133,30 @@ class LuaMethod(LuaConstruct):
     def __init__(self, obj: dict[str, Any], parent: str | None = None) -> None:
         super().__init__(obj)
         self.parent = parent
-        self.parameters = parse_object_list(obj.get("parameters") or [], LuaParameter)
+        self.parameters = parse_object_list(
+            obj.get("parameters") or [], LuaParameter
+        )
         self.return_values = parse_object_list(
             obj.get("return_values") or [], LuaReturnValue
         )
 
     @override
     def format(self, options: None = None) -> str:
-        function_name = f"{self.parent}.{self.name}" if self.parent else self.name
+        if self.parent:
+            function_name = f"{self.parent}.{self.name}"
+        else:
+            function_name = self.name
+
         formatted_params = "".join(
             [parameter.format() for parameter in self.parameters]
         )
-        literal_params = ", ".join([parameter.name for parameter in self.parameters])
+        literal_params = ", ".join(
+            [parameter.name for parameter in self.parameters]
+        )
         formatted_return_values = "".join(
             [return_value.format() for return_value in self.return_values]
         )
+
         return (
             f"{comment_lines(self.description)}"
             f"{formatted_params}"
@@ -166,12 +178,19 @@ class LuaClass(LuaConstruct):
         super().__init__(obj)
         methods = obj.get("methods") or []
         sort_order(methods)
-        self.methods = [LuaMethod(method, parent=self.name) for method in methods]
-        self.attributes = parse_object_list(obj.get("attributes") or [], LuaAttribute)
+        self.methods = [
+            LuaMethod(method, parent=self.name)
+            for method in methods
+        ]
+        self.attributes = parse_object_list(
+            obj.get("attributes") or [], LuaAttribute
+        )
 
     @override
     def format(self, options: None = None) -> str:
-        class_declaration = comment_lines(f"@class {self.name}\n{self.description}")
+        class_declaration = comment_lines(
+            f"@class {self.name}\n{self.description}"
+        )
         class_attributes = "".join(
             [attribute.format() for attribute in self.attributes]
         )
@@ -180,11 +199,11 @@ class LuaClass(LuaConstruct):
         return f"{class_declaration}{class_attributes}{class_literal}{class_methods}"
 
 
-def parse_lua_classes(class_object: list[Any]):
+def parse_lua_classes(class_object: list[Any]) -> list[LuaClass]:
     return parse_object_list(class_object or [], LuaClass)
 
 
-def parse_json(obj: dict[str, Any]):
+def parse_json(obj: dict[str, Any]) -> None:
     try:
         ## General Metadata
         # application = obj["application"]
@@ -195,7 +214,12 @@ def parse_json(obj: dict[str, Any]):
         # Nested
         lua_classes = parse_object_list(obj["classes"] or [], LuaClass)
         with open("classes.d.lua", "w", encoding="utf-8") as f:
-            f.write("\n\n".join([lua_class.format() for lua_class in lua_classes]))
+            f.write(
+                "\n\n".join([
+                    lua_class.format()
+                    for lua_class in lua_classes
+                ])
+            )
         logger.debug(f"Parsed {len(lua_classes)} classes")
         # lua_globals = parse_object_list(obj["globals"])
         # lua_concepts = parse_object_list(obj["concepts"])

@@ -5,15 +5,9 @@ import pytest
 
 from fapi_parser import formatter
 
-"""Notes: The assertation section for some normalizing functions will usually
-begin with a 'control' section, where the desired result itself will be tested,
-to ensure nothing is changed
-
-Abbreviations unique to this file:
-    e: expected - Expected result object from inputs
-"""
-
-# Weirdly enough, the fmt toggle tags cannot be placed after decorators
+# Weirdly enough, fmt toggle tags for Ruff cannot be placed after decorators, so
+# their closing comment will be placed at the first line of functions which do
+# have them.
 
 EMPTY_LINES_E0 = "a\nb\n"
 
