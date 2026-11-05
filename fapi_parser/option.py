@@ -3,8 +3,10 @@
 
 import argparse
 import logging
+
 from collections.abc import Iterable
 from typing import Protocol, override
+
 
 def str_to_bool(value: str):
     if value.lower() in ("true", "yes", "t", "y", "1"):

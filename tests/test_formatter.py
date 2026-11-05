@@ -16,6 +16,8 @@ Abbreviations unique to this file:
 # Weirdly enough, the fmt toggle tags cannot be placed after decorators
 
 EMPTY_LINES_E0 = "a\nb\n"
+
+
 # fmt: off
 @pytest.mark.parametrize(
     "s, expected", [

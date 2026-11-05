@@ -17,11 +17,12 @@ from . import (
     parser,
 )
 
+
 def main(argv: list[str] | None = None) -> int:
     argument_parser = option.build_parser()
     # The only reason the static type checker assumes the below value parse as
     # CustomArgs is due to the code generating the Namespace being at runtime.
-    args: option.CustomArgs = argument_parser.parse_args(argv) # pyright: ignore [reportAssignmentType]
+    args: option.CustomArgs = argument_parser.parse_args(argv)  # pyright: ignore [reportAssignmentType]
 
     root_logger = logging.getLogger()
     root_logger.setLevel(args.log_level)

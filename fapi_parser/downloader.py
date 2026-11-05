@@ -12,6 +12,7 @@ BASE_URL = "https://lua-api.factorio.com"
 
 logger = logging.getLogger(__name__)
 
+
 def check_version_exists(version: str) -> bool:
     """Checks if a version exists"""
     status_code = None

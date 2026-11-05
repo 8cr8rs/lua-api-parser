@@ -10,8 +10,10 @@ from .formatter import comment_lines
 
 logger = logging.getLogger(__name__)
 
+
 def filter_strings_only(list: list[Any]):
     return [item for item in list if isinstance(item, str)]
+
 
 def sort_order(data: list[Any]) -> None:
     """Sorts a JSON list by the 'order' property of each object"""

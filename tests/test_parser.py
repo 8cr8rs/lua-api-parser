@@ -12,6 +12,8 @@ SORT_ORDER_E0 = [
     {"order": 2},
     {"order": 3},
 ]
+
+
 # fmt: off
 @pytest.mark.parametrize(
     "data, expected",

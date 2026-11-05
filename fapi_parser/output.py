@@ -12,20 +12,13 @@ LOG_FORMAT = "[%(name)s] [%(levelname)s] [%(asctime)s] %(message)s"
 
 class Formatter(logging.Formatter):
     @override
-    def format(
-        self,
-        record: logging.LogRecord
-    ) -> str:
+    def format(self, record: logging.LogRecord) -> str:
         # formats log level name as lowercase
         record.levelname = record.levelname.lower()
         return super().format(record)
 
     @override
-    def formatTime(
-        self,
-        record: logging.LogRecord,
-        datefmt: str | None = None
-    ) -> str:
+    def formatTime(self, record: logging.LogRecord, datefmt: str | None = None) -> str:
         # formats log message timestamps in utc
         dt = datetime.fromtimestamp(record.created, tz=timezone.utc)
         return dt.isoformat(timespec="milliseconds").replace("+00:00", "Z")
