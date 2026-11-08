@@ -102,6 +102,6 @@ SORT_ORDER_E1 = [
         ),
     ]
 )
-def test_sort_order(data: dict[str, Any], expected: dict[str, Any]) -> None:
+def test_sort_order(data: list[Any], expected: list[Any]) -> None:
     formatter.sort_order(data)
     assert data == expected
