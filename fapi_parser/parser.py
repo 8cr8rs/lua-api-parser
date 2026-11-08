@@ -4,8 +4,6 @@
 from abc import ABC, abstractmethod
 from typing import Any, TypeVar, override
 
-T = TypeVar("T")
-
 from .formatter import comment_lines, sort_order
 
 
@@ -32,6 +30,7 @@ class LuaConstruct(ABC):
         """Returns a formatted version of the construct in Lua type annotation
         format"""
 
+T = TypeVar("T", bound=LuaConstruct)
 
 def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:
     """Parse the list obj with class construct"""
@@ -73,7 +72,7 @@ class LuaAttribute(LuaConstruct):
             self.type,
             self.description
         ])
-        return f"{comment_lines(" ".join(filtered))}"
+        return f"{comment_lines(' '.join(filtered))}"
 
 
 class LuaParameter(LuaConstruct):
@@ -84,7 +83,7 @@ class LuaParameter(LuaConstruct):
         super().__init__(obj)
         type = obj.get("type")
         self.type = type if isinstance(type, str) else "any"
-        self.optional = True if obj.get("optional") == "true" else False
+        self.optional = obj.get("optional") == "true"
 
     @override
     def format(self, options: None = None) -> str:
@@ -94,7 +93,7 @@ class LuaParameter(LuaConstruct):
             self.type + "?" if self.optional else self.type,
             self.description
         ])
-        return f"{comment_lines(" ".join(filtered))}"
+        return f"{comment_lines(' '.join(filtered))}"
 
 
 class LuaReturnValue(LuaConstruct):
@@ -112,7 +111,7 @@ class LuaReturnValue(LuaConstruct):
             "value",
             self.description
         ])
-        return f"{comment_lines(" ".join(filtered))}"
+        return f"{comment_lines(' '.join(filtered))}"
 
 
 class LuaMethod(LuaConstruct):
@@ -179,12 +178,16 @@ class LuaClass(LuaConstruct):
 
     @override
     def format(self, options: None = None) -> str:
+        class_declaration = comment_lines(f"@class {self.name}\n{self.description}")
+        class_attributes = "".join([attribute.format() for attribute in self.attributes])
+        class_literal = f"local {self.name} = {{}}\n"
+        class_methods = "\n".join([method.format() for method in self.methods])
         return (
-            f"{comment_lines(f"@class {self.name}\n{self.description}")}"
-            f"{"".join([attribute.format() for attribute in self.attributes])}"
-            f"local {self.name} = {{}}\n"
+            f"{class_declaration}"
+            f"{class_attributes}"
             ""
-            f"{"\n".join([method.format() for method in self.methods])}"
+            f"{class_literal}"
+            f"{class_methods}"
         )
 
 
