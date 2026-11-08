@@ -31,7 +31,6 @@ class LuaConstruct(ABC):
     def format(self, options: None = None) -> str:
         """Returns a formatted version of the construct in Lua type annotation
         format"""
-        pass
 
 
 def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:

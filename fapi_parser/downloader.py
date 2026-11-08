@@ -16,11 +16,11 @@ def a_1(version: str) -> bool:
         response = requests.head(f"{BASE_URL}/{version}")
         response.raise_for_status()
         return True
-    except HTTPError as e:
+    except HTTPError:
         if e.response.status_code == 404:
             return False
         # raise to higher caller if some other error occurs
-        raise e
+        raise
 
 
 def a_2(version: str, file_path: str) -> None:
@@ -30,7 +30,7 @@ def a_2(version: str, file_path: str) -> None:
         response.raise_for_status()
         with open(file_path, "bw") as f:
             _ = f.write(response.content)
-    except HTTPError as e:
+    except HTTPError:
         pass
 
 
