@@ -1,11 +1,10 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
-from collections.abc import Iterable
-from typing import Protocol, override
-
 import argparse
 import logging
+from collections.abc import Iterable
+from typing import Protocol, override
 
 
 class HelpFormatter(argparse.HelpFormatter):

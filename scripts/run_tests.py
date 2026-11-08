@@ -3,10 +3,10 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
-from pathlib import Path
 import argparse
-import pytest
+from pathlib import Path
 
+import pytest
 
 TEST_DIR = str(Path("./tests").resolve())
 

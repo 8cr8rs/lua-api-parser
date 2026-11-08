@@ -1,9 +1,10 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
+from zipfile import ZipFile
+
 import requests
 from requests.exceptions import HTTPError
-
 
 BASE_URL = "https://lua-api.factorio.com"
 
@@ -32,8 +33,6 @@ def a_2(version: str, file_path: str) -> None:
     except HTTPError as e:
         pass
 
-
-from zipfile import ZipFile
 
 def a_3(zip_path: str, dest: str) -> None:
     with ZipFile(zip_path, "r") as zip:

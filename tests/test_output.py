@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2026 eightcraters <eightcraters@hotmail.com>
 # SPDX-License-Identifier: Apache-2.0
 
-import pytest
-
 import logging
+
+import pytest
 
 from fapi_parser import output
 
