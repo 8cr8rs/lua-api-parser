@@ -12,12 +12,14 @@ BASE_URL = "https://lua-api.factorio.com"
 
 def a_1(version: str) -> bool:
     """Checks if a version exists"""
+    status_code = None
     try:
         response = requests.head(f"{BASE_URL}/{version}")
+        status_code = response.status_code
         response.raise_for_status()
         return True
     except HTTPError:
-        if e.response.status_code == 404:
+        if status_code == 404:
             return False
         # raise to higher caller if some other error occurs
         raise
