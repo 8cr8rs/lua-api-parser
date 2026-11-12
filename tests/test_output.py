@@ -26,7 +26,7 @@ def log_record() -> logging.LogRecord:
     )
 
 
-@pytest.mark.skip
+@pytest.mark.skip(reason="Test cases TBA")
 @pytest.mark.parametrize("record, expected", [])
 def test_format(
     formatter: output.Formatter, record: logging.LogRecord, expected: str
@@ -35,7 +35,7 @@ def test_format(
     assert record.levelname == expected
 
 
-@pytest.mark.skip
+@pytest.mark.skip(reason="Test cases TBA")
 @pytest.mark.parametrize("record, expected", [])
 def test_format_time(
     formatter: output.Formatter, record: logging.LogRecord, expected: str
