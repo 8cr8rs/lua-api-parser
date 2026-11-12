@@ -40,5 +40,6 @@ def main(argv: list[str] | None = None) -> int:
     #             continue
 
     obj = parse_json_file("runtime-api.json")
-    parse_json(obj)
+    if not obj is None:
+        parse_json(obj)
     return 0
