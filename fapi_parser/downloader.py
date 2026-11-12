@@ -10,6 +10,7 @@ BASE_URL = "https://lua-api.factorio.com"
 
 # todo: rename the a_* functions
 
+
 def a_1(version: str) -> bool:
     """Checks if a version exists"""
     status_code = None

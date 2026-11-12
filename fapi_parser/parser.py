@@ -8,14 +8,12 @@ from .formatter import comment_lines, sort_order
 
 
 def filter_strings_only(list: list[Any]):
-    return [
-        item
-        for item in list
-        if isinstance(item, str)
-    ]
+    return [item for item in list if isinstance(item, str)]
+
 
 # Note: options being None is a placeholder and configuring formatting will be
 # done later
+
 
 class LuaConstruct(ABC):
     name: str
@@ -30,7 +28,9 @@ class LuaConstruct(ABC):
         """Returns a formatted version of the construct in Lua type annotation
         format"""
 
+
 T = TypeVar("T", bound=LuaConstruct)
+
 
 def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:
     """Parse the list obj with class construct"""
@@ -47,9 +47,11 @@ def parse_object_list(obj: list[Any], construct: type[T]) -> list[T]:
         lua_constructs.append(construct(_obj))
     return lua_constructs
 
+
 # attr of attributes
 # - read_type OR write_type
 # - optional
+
 
 class LuaAttribute(LuaConstruct):
     type: str
@@ -66,12 +68,9 @@ class LuaAttribute(LuaConstruct):
 
     @override
     def format(self, options: None = None) -> str:
-        filtered = filter_strings_only([
-            "@field",
-            self.name,
-            self.type,
-            self.description
-        ])
+        filtered = filter_strings_only(
+            ["@field", self.name, self.type, self.description]
+        )
         return f"{comment_lines(' '.join(filtered))}"
 
 
@@ -87,12 +86,14 @@ class LuaParameter(LuaConstruct):
 
     @override
     def format(self, options: None = None) -> str:
-        filtered = filter_strings_only([
-            "@param",
-            self.name,
-            self.type + "?" if self.optional else self.type,
-            self.description
-        ])
+        filtered = filter_strings_only(
+            [
+                "@param",
+                self.name,
+                self.type + "?" if self.optional else self.type,
+                self.description,
+            ]
+        )
         return f"{comment_lines(' '.join(filtered))}"
 
 
@@ -105,18 +106,16 @@ class LuaReturnValue(LuaConstruct):
 
     @override
     def format(self, options: None = None) -> str:
-        filtered = filter_strings_only([
-            "@return",
-            self.type,
-            "value",
-            self.description
-        ])
+        filtered = filter_strings_only(
+            ["@return", self.type, "value", self.description]
+        )
         return f"{comment_lines(' '.join(filtered))}"
 
 
 class LuaMethod(LuaConstruct):
     """Technically methods can be either static (.) or instance (:), but
     Factorio's API does not differentiate. There are only static methods."""
+
     parent: str | None
     parameters: list[LuaParameter]
     return_values: list[LuaReturnValue]
@@ -124,30 +123,21 @@ class LuaMethod(LuaConstruct):
     def __init__(self, obj: dict[str, Any], parent: str | None = None) -> None:
         super().__init__(obj)
         self.parent = parent
-        self.parameters = parse_object_list(
-            obj.get("parameters") or [],
-            LuaParameter
-        )
+        self.parameters = parse_object_list(obj.get("parameters") or [], LuaParameter)
         self.return_values = parse_object_list(
-            obj.get("return_values") or [],
-            LuaReturnValue
+            obj.get("return_values") or [], LuaReturnValue
         )
 
     @override
     def format(self, options: None = None) -> str:
         function_name = f"{self.parent}.{self.name}" if self.parent else self.name
-        formatted_params = "".join([
-            parameter.format()
-            for parameter in self.parameters
-        ])
-        literal_params = ", ".join([
-            parameter.name
-            for parameter in self.parameters
-        ])
-        formatted_return_values = "".join([
-            return_value.format()
-            for return_value in self.return_values
-        ])
+        formatted_params = "".join(
+            [parameter.format() for parameter in self.parameters]
+        )
+        literal_params = ", ".join([parameter.name for parameter in self.parameters])
+        formatted_return_values = "".join(
+            [return_value.format() for return_value in self.return_values]
+        )
         return (
             f"{comment_lines(self.description)}"
             f"{formatted_params}"
@@ -155,9 +145,11 @@ class LuaMethod(LuaConstruct):
             f"function {function_name}({literal_params}) end\n"
         )
 
+
 # attr of classes
 # - abstract
 # - operators
+
 
 class LuaClass(LuaConstruct):
     methods: list[LuaMethod]
@@ -167,28 +159,18 @@ class LuaClass(LuaConstruct):
         super().__init__(obj)
         methods = obj.get("methods") or []
         sort_order(methods)
-        self.methods = [
-            LuaMethod(method, parent=self.name)
-            for method in methods
-        ]
-        self.attributes = parse_object_list(
-            obj.get("attributes") or [],
-            LuaAttribute
-        )
+        self.methods = [LuaMethod(method, parent=self.name) for method in methods]
+        self.attributes = parse_object_list(obj.get("attributes") or [], LuaAttribute)
 
     @override
     def format(self, options: None = None) -> str:
         class_declaration = comment_lines(f"@class {self.name}\n{self.description}")
-        class_attributes = "".join([attribute.format() for attribute in self.attributes])
+        class_attributes = "".join(
+            [attribute.format() for attribute in self.attributes]
+        )
         class_literal = f"local {self.name} = {{}}\n"
         class_methods = "\n".join([method.format() for method in self.methods])
-        return (
-            f"{class_declaration}"
-            f"{class_attributes}"
-            ""
-            f"{class_literal}"
-            f"{class_methods}"
-        )
+        return f"{class_declaration}{class_attributes}{class_literal}{class_methods}"
 
 
 def parse_json(obj: dict[str, Any]):
@@ -202,10 +184,7 @@ def parse_json(obj: dict[str, Any]):
         # Nested
         lua_classes = parse_object_list(obj["classes"] or [], LuaClass)
         with open("classes.d.lua", "w", encoding="utf-8") as f:
-            f.write("\n\n".join([
-                lua_class.format()
-                for lua_class in lua_classes
-            ]))
+            f.write("\n\n".join([lua_class.format() for lua_class in lua_classes]))
         # lua_globals = parse_object_list(obj["globals"])
         # lua_concepts = parse_object_list(obj["concepts"])
         # lua_global_functions = parse_object_list(obj["global_functions"])

@@ -13,11 +13,12 @@ from .parser import parse_json
 
 def main(argv: list[str] | None = None) -> int:
     parser = option.build_parser()
-    args: option.CustomArgs = parser.parse_args(argv)
+    # The only reason the static type checker assumes the below value parse as
+    # CustomArgs is due to the code generating the Namespace being at runtime.
+    args: option.CustomArgs = parser.parse_args(argv) # pyright: ignore [reportAssignmentType]
 
     logger = output.get_logger("fapi-parser", args.log_level)
     logger.debug(args)
-
 
     def parse_json_file(file_path: str) -> dict[str, Any] | None:
         """Parses a JSON object from a file"""

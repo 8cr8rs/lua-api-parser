@@ -14,7 +14,7 @@ class HelpFormatter(argparse.HelpFormatter):
         usage: str | None,
         actions: Iterable[argparse.Action],
         groups: Iterable[argparse._MutuallyExclusiveGroup],
-        prefix: str | None
+        prefix: str | None,
     ) -> str:
         return super()._format_usage(usage, actions, groups, prefix)
 
@@ -22,8 +22,10 @@ class HelpFormatter(argparse.HelpFormatter):
     def _format_action(self, action: argparse.Action) -> str:
         return super()._format_action(action)
 
-"""Interface class for argument typing suggestions"""
+
 class CustomArgs(Protocol):
+    """Interface class for argument typing suggestions"""
+
     input_files: list[str]
     log_level: int
     onefile: bool
@@ -47,7 +49,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     general = parser.add_argument_group("General Options")
     general.add_argument(
-        "-h", "--help",
+        "-h",
+        "--help",
         action="help",
         help="Print this help message and exit",
     )
@@ -65,7 +68,8 @@ def build_parser() -> argparse.ArgumentParser:
     output = parser.add_argument_group("Output Options")
     output_console = output.add_mutually_exclusive_group()
     output_console.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_const",
         dest="log_level",
         default=logging.INFO,
@@ -85,7 +89,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output directory for files",
     )
     file.add_argument(
-        "--ext", "--extension",
+        "--ext",
+        "--extension",
         action="store",
         dest="output_ext",
         default="d.lua",
@@ -98,7 +103,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output as one file",
     )
 
-    # positional argument
+    # Positional arguments
     parser.add_argument(
         "input_files",
         action="store",
