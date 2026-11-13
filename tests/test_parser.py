@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from fapi_parser import parser
+from lua_api_parser import parser
 
 SORT_ORDER_E0 = [
     {"order": 1},

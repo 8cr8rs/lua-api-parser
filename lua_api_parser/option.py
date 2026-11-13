@@ -47,10 +47,10 @@ class CustomArgs(Protocol):
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="factorio-api-docs-generator",
+        prog="lua-api-parser",
         usage="%(prog)s [options]",
         description=(
-            "A CLI to convert JSONdocs from Factorio's online API into "
+            "A CLI to convert JSON docs from Lua-based APIs into "
             "lua_ls/EmmyLua LSP parsable type definitions."
         ),
         add_help=False,

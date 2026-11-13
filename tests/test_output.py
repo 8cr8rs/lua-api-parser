@@ -5,7 +5,7 @@ import logging
 
 import pytest
 
-from fapi_parser import output
+from lua_api_parser import output
 
 
 @pytest.fixture()

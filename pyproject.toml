@@ -3,9 +3,9 @@ requires = ["setuptools>=84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fapi-parser"
+name = "lua-api-parser"
 version = "0.1.0"
-description = "A CLI to convert JSON docs from Factorio's API JSON docs into lua_ls/EmmyLua LSP parsable type definitions."
+description = "A CLI to convert JSON docs from Lua-based APIs into lua_ls/EmmyLua LSP parsable type definitions."
 readme = "README.md"
 license-files = ["LICENSE"]
 authors = [{ name = "eightcraters", email = "eightcraters@hotmail.com" }]
@@ -13,10 +13,7 @@ maintainers = []
 requires-python = ">=3.10"
 keywords = [
   "cli",
-  "factorio",
-  "factorio-modding",
   "lua",
-  "modders",
 ]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
@@ -41,9 +38,9 @@ dev = ["pytest>=9.0", "pytest-cov>=7.0"]
 
 [project.urls]
 # Replace <project> with repository name
-Repository = "https://github.com/8cr8rs/factorio-api-parser"
-Documentation = "https://github.com/8cr8rs/factorio-api-parser#readme"
-Issues = "https://github.com/8cr8rs/factorio-api-parser/issues"
+Repository = "https://github.com/8cr8rs/lua-api-parser"
+Documentation = "https://github.com/8cr8rs/lua-api-parser#readme"
+Issues = "https://github.com/8cr8rs/lua-api-parser/issues"
 
 [tool.pyright]
 # Prevents the forced assign to unused variable warning

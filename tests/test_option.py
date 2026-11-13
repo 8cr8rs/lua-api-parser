@@ -5,7 +5,7 @@ from argparse import ArgumentError
 
 import pytest
 
-from fapi_parser import option
+from lua_api_parser import option
 
 
 def test_build_parser() -> None:

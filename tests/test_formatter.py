@@ -3,7 +3,7 @@
 
 import pytest
 
-from fapi_parser import formatter
+from lua_api_parser import formatter
 
 # Weirdly enough, fmt toggle tags for Ruff cannot be placed after decorators, so
 # their closing comment will be placed at the first line of functions which do
